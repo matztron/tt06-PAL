@@ -38,7 +38,7 @@ assign tt_uio_in_tb = {7'b0, config_tb}; // config bit is LSB
 assign tt_clk_tb = clk_tb;
 
 // UUT
-TT_MATTHIAS_M_PAL_TOP_WRAPPER uut(
+tt_um_MATTHIAS_M_PAL_TOP_WRAPPER uut(
     .ui_in(tt_ui_in_tb),        // Dedicated inputs
     .uo_out(tt_uo_out_tb),      // Dedicated outputs
     .uio_in(tt_uio_in_tb),      // IOs: Input path
