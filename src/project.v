@@ -5,7 +5,7 @@
 
 `define default_netname none
 
-module tt_um_example (
+module TT_MATTHIAS_M_PAL_TOP_WRAPPER (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -16,9 +16,29 @@ module tt_um_example (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+  // All output pins must be assigned. If not used, assign to 0. 
   assign uio_out = 0;
-  assign uio_oe  = 0;
+  // IO pin configuration
+  assign uio_oe = 8'b0000_0000; // all IOs are inputs (the LSB is used to shift in Config data)
+
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // PAL size parameters
+  parameter NUM_INPUTS = 8;
+  parameter NUM_INTERMEDIATE_STAGES = 8;
+  parameter NUM_OUTPUTS = 8;
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  // PAL instance
+  PAL #(
+    .N(NUM_INPUTS), // Number of Inputs
+    .M(NUM_OUTPUTS), // NUmber of outputs
+    .P(NUM_INTERMEDIATE_STAGES) // Number of intermediate stages
+  ) pal_I (
+    .CLK(clk), // do clock gating with ena signal?
+    .RES_N(rst_n),
+    .CFG(uio_in[0]),
+    .INPUT_VARS(ui_in),
+    .OUTPUT_VALS(uo_out)
+  );
 
 endmodule
