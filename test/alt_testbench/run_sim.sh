@@ -3,7 +3,7 @@
 # do 'chmod +x latch_sim.sh' on this script to execute it :)
 
 OUTPUT_PATH="./output"
-SRC_PATH="../src"
+SRC_PATH="../../src"
 TB_PATH="."
 
 # in case there are already old files: delete them to avoid confusion!
