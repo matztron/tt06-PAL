@@ -1,9 +1,9 @@
 module pal_tb ();
 
 // configure these
-parameter NUM_INPUTS = 8;
+parameter NUM_INPUTS = 8; // update by hand!
 parameter NUM_OUPUTS = 8;
-parameter NUM_INTERM_STAGES = 8;
+parameter NUM_INTERM_STAGES = 16;
 // ---
 
 localparam BITSTREAM_LEN = $signed(2*NUM_INPUTS*NUM_INTERM_STAGES + NUM_INTERM_STAGES*NUM_OUPUTS);
@@ -13,10 +13,11 @@ reg clk_tb; // this clock is unused...
 reg clk_pal_tb;
 
 wire [BITSTREAM_LEN-1:0] bitstream; // TODO: Update width by hand (according to assignment below)
-assign bitstream = 192'b000000000000000011000000000000000000000010000000000000000100000000000000000000000000000000000000000000000000000000000000000000001100000011000000110000001100000011000000110000001100000011000000; // TODO: Update this by hand
+assign bitstream = 384'b000000000000000000000000000000001100000000000000000000000000000000000000000000001000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011000000000000001100000000000000110000000000000011000000000000001100000000000000110000000000000011000000000000001100000000000000; // TODO: Update this by hand
 
 //assign clk_pal_tb = clk_tb ^ clk_en_tb;
 
+reg enable_tb;
 reg config_tb;
 reg [NUM_INPUTS-1:0] inputs_tb;
 wire [NUM_OUPUTS-1:0] outputs_tb;
@@ -33,7 +34,7 @@ reg tt_res_n_tb;
 
 assign tt_ui_in_tb = inputs_tb; // TODO: Naive: If >8 inputs are configured then the MSB-bits are truncated!
 assign outputs_tb = tt_uo_out_tb; // TODO: Naive: If >8 outputs are configured then the MSB-bits are truncated!
-assign tt_uio_in_tb = {7'b0, config_tb}; // config bit is LSB
+assign tt_uio_in_tb = {6'b0, enable_tb, config_tb}; // config bit is LSB
 
 assign tt_clk_tb = clk_pal_tb;
 
@@ -62,6 +63,7 @@ initial begin
     clk_pal_tb = 1'b0;
     tt_res_n_tb = 1'b1;
     tt_ena_tb = 1'b1;
+    enable_tb = 1'b1;
 
     #10
 

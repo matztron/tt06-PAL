@@ -5,7 +5,7 @@ module SR #(
     input cfg,
     input res_n,
     input en,
-    output reg [LEN-1:0] ff_chain
+    output [LEN-1:0] ff_chain
 );
 
     reg [LEN-1:0] internal_ff_chain;
@@ -20,7 +20,7 @@ module SR #(
         end
     end
 
-    //
-    assign FF_CHAIN = en ? internal_ff_chain : {(LEN){1'b0}};
+    // only apply configuration to the pal fabric once the enable signal is asserted!
+    assign ff_chain = en ? internal_ff_chain : {(LEN){1'b0}};
 
 endmodule
