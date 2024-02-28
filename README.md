@@ -46,6 +46,8 @@ The python script to generate the bitstream currently does the folloing
 Ideas for expansions are obvious:
 First of all the current bitstream generation is very wasteful. Techniques like reuse of terms could benefit the amount of logic that can be mounted on the device.
 Another obvious improvement is the support of multiple outputs.
+Programmable inversion of outputs; Feedback paths from output to input also come to mind
+(see datasheet of a commercial PAL device: https://www.ti.com/lit/ds/symlink/pal16r8am.pdf?ts=1709131093901&ref_url=https%253A%252F%252Fwww.google.com%252F )
 
 ### Hardware optimizations
 A flipflop chain for configuration is simple but also costly in terms of hardware. 
