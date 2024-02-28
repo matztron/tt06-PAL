@@ -1,20 +1,26 @@
 module SR #(
     parameter LEN=8
 )(
-    input CLK,
-    input CFG,
-    input RES_N,
-    output reg [LEN-1:0] FF_CHAIN
+    input clk,
+    input cfg,
+    input res_n,
+    input en,
+    output reg [LEN-1:0] ff_chain
 );
 
-// Shift left whenever a posedge occurs
-always @(posedge CLK) begin
-    //if (~RES_N) begin
-        //FF_CHAIN <= {(LEN){1'b0}}; // when reset set all bits to 0
-    //end else begin
-        FF_CHAIN    <= FF_CHAIN << 1;
-        FF_CHAIN[0] <= CFG;
-    //end
-end
+    reg [LEN-1:0] internal_ff_chain;
+
+    // Shift left whenever a posedge occurs
+    always @(posedge clk) begin
+        if (~res_n) begin
+            internal_ff_chain <= {(LEN){1'b0}}; // when reset set all bits to 0
+        end else begin
+            internal_ff_chain    <= internal_ff_chain << 1;
+            internal_ff_chain[0] <= cfg;
+        end
+    end
+
+    //
+    assign FF_CHAIN = en ? internal_ff_chain : {(LEN){1'b0}};
 
 endmodule

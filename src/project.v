@@ -36,6 +36,7 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
   ) pal_I (
     .CLK(clk), // do clock gating with ena signal?
     .RES_N(rst_n),
+    .EN(ena & uio_in[1]), // if the enable signal is asserted the configuration is applied to the PAL fabric
     .CFG(uio_in[0]),
     .INPUT_VARS(ui_in),
     .OUTPUT_VALS(uo_out)

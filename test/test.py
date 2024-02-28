@@ -30,3 +30,9 @@ async def test_adder(dut):
   await ClockCycles(dut.clk, 1)
 
   assert dut.uo_out.value == 50'''
+
+  # Custom testcase
+  dut._log.info("Test")
+  # Clock data into device
+
+  # Test a few input combinations to see if it works

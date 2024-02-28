@@ -5,6 +5,7 @@ module PAL #(
 )(
     input CLK,
     input RES_N,
+    input EN,
     input CFG,
     input [N-1:0] INPUT_VARS,
     output [M-1:0] OUTPUT_VALS
@@ -35,10 +36,11 @@ module PAL #(
     SR #(
         .LEN(SR_LEN)
     ) sr (
-        .CLK(CLK),
-        .RES_N(RES_N),
-        .CFG(CFG),
-        .FF_CHAIN(FF_CHAIN)
+        .clk(CLK),
+        .res_n(RES_N),
+        .en(EN),
+        .cfg(CFG),
+        .ff_chain(FF_CHAIN)
     );
 
     // NOT gates
