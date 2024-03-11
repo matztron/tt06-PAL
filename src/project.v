@@ -24,8 +24,8 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // PAL size parameters
   parameter NUM_INPUTS = 8;
-  parameter NUM_INTERMEDIATE_STAGES = 12;
-  parameter NUM_OUTPUTS = 8;
+  parameter NUM_INTERMEDIATE_STAGES = 15;
+  parameter NUM_OUTPUTS = 4;
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   // PAL instance
@@ -39,7 +39,7 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
     .EN(ena & uio_in[1]), // if the enable signal is asserted the configuration is applied to the PAL fabric
     .CFG(uio_in[0]),
     .INPUT_VARS(ui_in),
-    .OUTPUT_VALS(uo_out)
+    .OUTPUT_VALS(uo_out[3:0])
   );
 
 endmodule
