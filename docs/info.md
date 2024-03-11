@@ -20,7 +20,15 @@ However in order to get the programmed function(s) to generate outputs the enabl
 
 ### Generate bitstreams
 To generate bitstreams for the shift register a Python script is provided in this repository.
-It is important to set the right 
+It is important to set the right number of inputs, intermediate stages and outputs. 
+This has to be exactly like the physical PAL-device you have at hand.
+A boolean logic function is denoted in the following way:
+`O0 = ~I0 | I1 & ~(I2 & I3)`
+It is important to declare the used variables before. See the Python script as it was done for O0, I1, I2, I3.
+You can add or remove variables. However keep in mind that the physical number of variables is limited.
+You can check the physical number that will be on the device in the `project.v` file.
+
+### 
 
 ## How to test
 
