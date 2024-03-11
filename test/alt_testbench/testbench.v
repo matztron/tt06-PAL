@@ -2,8 +2,8 @@ module pal_tb ();
 
 // configure these
 parameter NUM_INPUTS = 8; // update by hand!
-parameter NUM_OUPUTS = 8;
-parameter NUM_INTERM_STAGES = 16;
+parameter NUM_OUPUTS = 4;
+parameter NUM_INTERM_STAGES = 14;
 // ---
 
 localparam BITSTREAM_LEN = $signed(2*NUM_INPUTS*NUM_INTERM_STAGES + NUM_INTERM_STAGES*NUM_OUPUTS);
@@ -13,7 +13,7 @@ reg clk_tb; // this clock is unused...
 reg clk_pal_tb;
 
 wire [BITSTREAM_LEN-1:0] bitstream; // TODO: Update width by hand (according to assignment below)
-assign bitstream = 384'b000000000000000000000000000000001100000000000000000000000000000000000000000000001000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011000000000000001100000000000000110000000000000011000000000000001100000000000000110000000000000011000000000000001100000000000000; // TODO: Update this by hand
+assign bitstream = 280'b0000000000000000000000000000110000000000000000000000000000000000000000100000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011000000000000110000000000001100000000000011000000000000; // TODO: Update this by hand
 
 //assign clk_pal_tb = clk_tb ^ clk_en_tb;
 
@@ -29,14 +29,14 @@ wire [7:0] tt_uio_in_tb;
 wire [7:0] tt_uio_out_tb; // output - i dont care...
 wire [7:0] tt_uio_oe_tb; // output - i dont care...
 reg tt_ena_tb;
-wire tt_clk_tb;
+wire tt_clk_tb; // UNUSED!!!
 reg tt_res_n_tb;
 
 assign tt_ui_in_tb = inputs_tb; // TODO: Naive: If >8 inputs are configured then the MSB-bits are truncated!
 assign outputs_tb = tt_uo_out_tb; // TODO: Naive: If >8 outputs are configured then the MSB-bits are truncated!
-assign tt_uio_in_tb = {6'b0, enable_tb, config_tb}; // config bit is LSB
+assign tt_uio_in_tb = {5'b0, clk_pal_tb, enable_tb, config_tb}; // config bit is LSB
 
-assign tt_clk_tb = clk_pal_tb;
+//assign clk_tb = clk_pal_tb;
 
 // UUT
 tt_um_MATTHIAS_M_PAL_TOP_WRAPPER uut(
@@ -52,10 +52,10 @@ tt_um_MATTHIAS_M_PAL_TOP_WRAPPER uut(
 
 
 // Clock source
-initial begin
+/*initial begin
     clk_tb=0;
     forever #2 clk_tb=~clk_tb;
-end
+end*/
 
 integer i;
 // Bitstream programming
@@ -63,11 +63,12 @@ initial begin
     clk_pal_tb = 1'b0;
     tt_res_n_tb = 1'b1;
     tt_ena_tb = 1'b1;
-    enable_tb = 1'b1;
+    enable_tb = 1'b0;
 
     #10
 
     for (i = 0; i < BITSTREAM_LEN; i = i + 1) begin
+        #2
         config_tb = bitstream[i];
         clk_pal_tb = 1'b1;
         #2;
@@ -75,6 +76,9 @@ initial begin
 	end
 
     clk_pal_tb = 1'b0;
+    #10
+    // Now set the outputs active
+    enable_tb = 1'b1;
 end
 
 // Testcase

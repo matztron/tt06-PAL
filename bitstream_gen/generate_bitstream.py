@@ -6,8 +6,8 @@ from pyeda.inter import *
 
 # shape of the PAL device
 INPUT_NUM = 8 # N
-INTERMED_SIG_NUM = 16 # P
-OUTPUT_NUM = 8 # M
+INTERMED_SIG_NUM = 14 # P
+OUTPUT_NUM = 4 # M
 
 #---
 # Variables

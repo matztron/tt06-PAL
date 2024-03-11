@@ -29,6 +29,17 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
   parameter NUM_OUTPUTS = 4;
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  // Pin assignment
+  // Clock: uio_in[2]
+  // Reset: res_n
+  // Enable: uio_in[1]
+  // Config bit: uio_in[0]
+
+  // Input vars: ui_in[7:0]
+  // Output vars: uo_out[3:0]
+
+  // clk is unused!
+
   // PAL instance
   PAL #(
     .N(NUM_INPUTS), // Number of Inputs
