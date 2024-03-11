@@ -1,30 +1,19 @@
-# Sample testbench for a Tiny Tapeout project
+# Testbench
 
-This is a sample testbench for a Tiny Tapeout project. It uses [cocotb](https://docs.cocotb.org/en/stable/) to drive the DUT and check the outputs.
+Yeah I know TinyTapeout wants us to use this  [cocotb](https://docs.cocotb.org/en/stable/) to drive the DUT and check the outputs.
 
-## Setting up
+However here a traditional Verilog testbench was written.
+To run the tests I recommend the free [OSS CAD suite](https://github.com/YosysHQ/oss-cad-suite-build).
+After sourcing the OSS CAD suit environment e.g. with:
 
-1. Edit [Makefile](Makefile) and modify `PROJECT_SOURCES` to point to your Verilog files.
-2. Edit [tb.v](tb.v) and replace `tt_um_example` with your module name.
+`source /Applications/oss-cad-suite/environment`
 
-## How to run
+on MAC.
 
-To run the RTL simulation:
+You can run 
+`bash run_sim.sh`
+in the `test/alt_testbench`-folder.
+The gtkwave GUI will open and you can add signals to inspect.
 
-```sh
-make
-```
+If you don't want to use the shell script you can study the commands in the shell-script and execute them on your own.
 
-To run gatelevel simulation, first harden your project and copy `../runs/wokwi/results/final/verilog/gl/{your_module_name}.v` to `gate_level_netlist.v`.
-
-Then run:
-
-```sh
-make GATES=yes
-```
-
-## How to view the VCD file
-
-```sh
-gtkwave tb.vcd tb.gtkw
-```
