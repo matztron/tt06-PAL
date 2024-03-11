@@ -35,7 +35,7 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
     .M(NUM_OUTPUTS), // NUmber of outputs
     .P(NUM_INTERMEDIATE_STAGES) // Number of intermediate stages
   ) pal_I (
-    .CLK(clk), // do clock gating with ena signal?
+    .CLK(uio_in[2]), // do clock gating with ena signal?
     .RES_N(rst_n),
     .EN(ena & uio_in[1]), // if the enable signal is asserted the configuration is applied to the PAL fabric
     .CFG(uio_in[0]),

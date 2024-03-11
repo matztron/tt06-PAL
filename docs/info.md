@@ -11,7 +11,26 @@ You can also include images in this folder and reference them in the markdown. E
 
 This project is a PAL (programmable array logic device). It is programmed with a shift register.
 
-### Pin assignment
+### Taped-out configuration and pin assignment
+Because I do not want to update the text below too often I write the configuration of the physical PAL device in terms of:
+- Number of inputs
+- Number of itermediatory stages
+- Number of outputs
+...only once. In the following this will be refered to however the exact number is only mentioned here.
+The numbers are:
+- 8 inputs
+- 14 intermediatory stages
+- 4 outputs
+
+<img src="/Images/example_n4_p4_o3_no_connections.png" alt="drawing" width="600"/>
+The numbers at the intersections of inputs/intermediate/output wires denote the indices of the shift register chain at this postion. The generated bitstream has a '1' at this positions if a connection is set and a '0' if no connection is set.
+
+#### Pin assignment
+- The eight inputs are connected to the eight `uio_in` wires.
+- The enable pin to put the logic function on the outputs is connected to the `uio_in[1]` pin.
+- The configuration bit pin, which holds the data that is next shifted in is connected to the `uio_in[0]`. Aka here the bitstream is fed into - bit by bit!
+- The outputs are displayed on the first four `uo_out[3:0]` bits.
+- The rising edges are (clock for the shift register) are supplied via the `uio_in[2]` pin.
 
 ### Programming
 At every rising edge of the programming-clock the shift register takes in a value from the config_bit pin.
@@ -28,11 +47,15 @@ It is important to declare the used variables before. See the Python script as i
 You can add or remove variables. However keep in mind that the physical number of variables is limited.
 You can check the physical number that will be on the device in the `project.v` file.
 
-### 
+At this point in time the bitstream generation in the Python script has plenty of limitations. It is easy to imagine improvements. For example: As of now the generator only supports the generation of bitstreams for one output.
+The physical device likely has more
+
+### Using the PAL
+Okay now that you have transmitted the bitstream onto the PALs shift register
 
 ## How to test
 
-By irst shifting in a bitstream configuration into the device the AND/OR matrix of the device can be programmed to implement boolean functions with a set of inputs and outputs.
+By first shifting in a bitstream configuration into the device the AND/OR matrix of the device can be programmed to implement boolean functions with a set of inputs and outputs.
 
 ## External hardware
 
