@@ -12,6 +12,7 @@ localparam BITSTREAM_LEN = $signed(2*NUM_INPUTS*NUM_INTERM_STAGES + NUM_INTERM_S
 reg clk_tb; // this clock is unused...
 reg clk_pal_tb;
 
+// Currently: O0 = ~I0 | I1 & ~(I2 & I3)
 wire [BITSTREAM_LEN-1:0] bitstream; // TODO: Update width by hand (according to assignment below)
 assign bitstream = 280'b0000000000000000000000000000110000000000000000000000000000000000000000100000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011000000000000110000000000001100000000000011000000000000; // TODO: Update this by hand
 
@@ -86,19 +87,36 @@ initial begin
     $dumpfile("./output/SIM.vcd");
     $dumpvars(0, pal_tb);
 
-    #1000
+    #100
 
+    // here the output is 0
     inputs_tb = 8'b0000_1111;
 
-    #1000
+    #100
 
+    // Change some of the upper bits -> these are not used in the logic function
+    // thus this should have no effect
+    inputs_tb = 8'b0101_1111;
+
+    // here the output is 0
     inputs_tb = 8'b0000_0000;
 
-    #1000
+    #100
 
+    // here the output is 1
     inputs_tb = 8'b0000_1010;
 
-    #1000
+    #50
+
+    // when enable is de-asserted the outputs should go to 0
+    enable_tb = 0;
+
+    #50
+
+    // now back to 1 because it is re-asserted
+    enable_tb = 1;
+
+    #100
 
     $finish;
 end
