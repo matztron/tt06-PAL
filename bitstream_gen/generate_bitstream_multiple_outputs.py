@@ -10,6 +10,7 @@
 # https://stackoverflow.com/questions/27312328/disjunctive-normal-form-in-python
 
 from pyeda.inter import *
+import parse_eq_str as str_parser
 
 # shape of the PAL device
 INPUT_NUM = 8 # N
@@ -24,12 +25,12 @@ I0 = exprvar('I0')
 I1 = exprvar('I1')
 I2 = exprvar('I2')
 I3 = exprvar('I3')
-I4 = exprvar('I4')
+'''I4 = exprvar('I4')
 I5 = exprvar('I5')
 I6 = exprvar('I6')
-I7 = exprvar('I7')
+I7 = exprvar('I7')'''
 
-Inputs = [I0, I1, I2, I3, I4, I5, I6, I7]
+Inputs = [I0, I1, I2, I3] #I4, I5, I6, I7]
 
 #---
 
@@ -42,9 +43,9 @@ Inputs = [I0, I1, I2, I3, I4, I5, I6, I7]
 # &: AND 
 
 # For now: There should only be one equation
-O0 = ~I0 | I1 & ~(I2 & I3) 
-O1 = ~I0 | I1 & ~(I2 & I3) & I7 
-O2 = ~I0
+O0 = ~I1
+O1 = I2 | ~I1
+O2 = I3
 
 Equations = [O0, O1, O2]
 #---
@@ -90,27 +91,103 @@ for eq in Equations:
 # Set the current column accordingly
 print(Eq_DNF_str)
 
-# pattern
-pattern_and = "And("
-pattern_cl_brckt_ = ")"
+# pattern (there can only be "and" & "or" gates because we have a DNF)
+pattern_and = "And"
+pattern_or = "Or"
 for eq_str in Eq_DNF_str:
-    # get stuff between 'AND(' and ')'
-    and_indices = [i for i in range(len(eq_str)) if eq_str.startswith(pattern_and, i)]
-    cl_brckt_indices = [i for i in range(len(eq_str)) if eq_str.startswith(pattern_cl_brckt_, i)] # closing bracket indices
-    
-    # Maybe there is only one term such as '~I1'
-    if (len(and_indices) == 0 and len(cl_brckt_indices) == 0):
-        Terms_per_Outp.append([eq_str])
-        break
-
-    print(and_indices)
-    print(cl_brckt_indices)
 
     terms = []
-    for i, a_idx in enumerate(and_indices):
-        terms.append(eq_str[and_indices[i]+len(pattern_and):cl_brckt_indices[i]])
-    #!
+    # what can occure here:
+    # I0
+    # ~IO
+    # And(I0, I1)
+    # Or(And(I0, I2), I3)
+    # Or(And(I0, I2), And(I2,I3))
+    # Or(I1, I2)
+    
+    print("---")
+    print(eq_str)
+    
+    # find all occurances of ORs
+    # OR index can ever only be 0 (list has 1 element) or NONE (list has 0 elements)
+    or_indices = list(str_parser.find_all(eq_str, pattern_or))
+    print("or indices:")
+    print(or_indices)
+    
+    # check if there is an and
+    and_indices = list(str_parser.find_all(eq_str, pattern_and))
+    print("and indices:")
+    print(and_indices)
+    
+    if (len(or_indices) == 0):
+        # something like:
+        # I0
+        # ~IO
+        # And(I0, I1)
+        
+        if (len(and_indices) == 0):
+            # something like:
+            # I0
+            # ~IO
+            terms.append(eq_str)
+        else:
+            # something like:
+            # And(I0, I1)
+            for and_index in and_indices:
+                new_term = str_parser.get_bracket_content(eq_str, and_index)
+                terms.append(new_term)
+            
+    elif (len(or_indices) == 1):
+        # something like:
+        # Or(And(I0, I2), I3)
+        # Or(And(I0, I2), And(I2,I3))
+        # Or(I1, I2)
+        
+        # get content of OR-bracket!
+        or_content = str_parser.get_bracket_content(eq_str, or_indices[0])
+        
+        # divide input at ","
+        substrings = or_content.split(",")
+        
+        # we have free standing operands isolated now
+        # like the I3 in: Or(And(I0, I2), I3)
+        # However the AND is also separated...
+        
+        fused_substrings = []
+        and_start_idx = -1
+        for i, sub in enumerate(substrings):
+            
+            if (and_start_idx != -1):
+                # we are currently looking for a closing bracket
+                if (")" in sub):
+                    # fuse
+                    new_substring = ""
+                    for j in range(and_start_idx, i+1):
+                        new_substring = new_substring + "," + substrings[j]
+                    fused_substrings.append(new_substring)
+                    and_start_idx = -1
+            
+            elif ("And" in sub):
+                    and_start_idx = i
+            else:
+                fused_substrings.append(sub)
+        
+        # remove spaces from substrings
+        # add single terms directly
+        
+        # for AND()-terms look into the bracket and then add the content of that to terms
+        for i, f_sub in enumerate(fused_substrings):
+            if ("And" in f_sub):
+                # find where the And starts
+                and_indices = list(str_parser.find_all(f_sub, "And"))
+                brckt_content = str_parser.get_bracket_content(f_sub, and_indices[0])
+                
+                # replace:
+                fused_substrings[i] = brckt_content
+        terms.extend(fused_substrings)
+    
     Terms_per_Outp.append(terms)
+
 
 # Terms: Here we only have the operands that are 'and'ed together
 #print(f"Extracted terms: {terms}")
@@ -139,13 +216,18 @@ print(f"Length of bitstream: {len(bitstream)}")
 
 for term_index, term in enumerate(Term_pool):
     # split string at commas!
-    # and remove trailing spaces
-    operands = term.split(', ')
+    operands = term.split(',')
+    
 
     # show them
+    print("operands:")
     print(operands)
 
     for op in operands:
+        
+        #remove spaces
+        op = op.strip()
+        
         use_inverted = 0
         input_num = -1
         # EXPECTED SYNTAX: <optional tilde>I<uinput number>
@@ -186,7 +268,8 @@ for term_index, term in enumerate(Term_pool):
 
         # determine bit in bitstream to set
         # we need a column per term TODO: Check if we have this before!
-
+        
+        # added a '+1' because for 0th row inversion does not work!
         bitstream[INTERMED_SIG_NUM*(2*input_num+use_inverted)+term_index] = '1'
 
 # We filled the intermediate columns according to the order of the Term_pool list
