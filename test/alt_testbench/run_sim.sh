@@ -9,6 +9,6 @@ TB_PATH="."
 # in case there are already old files: delete them to avoid confusion!
 rm ${OUTPUT_PATH}/*
 
-iverilog -o ${OUTPUT_PATH}/SIM ${TB_PATH}/testbench.v ${SRC_PATH}/project.v ${SRC_PATH}/PAL.v ${SRC_PATH}/SR.v ${SRC_PATH}/crosspoint.v ${SRC_PATH}/REDUCE.v ${SRC_PATH}/STRIDE.v
+iverilog -o ${OUTPUT_PATH}/SIM ${TB_PATH}/testbench.v ${SRC_PATH}/project.v ${SRC_PATH}/PAL.v ${SRC_PATH}/SR.v ${SRC_PATH}/crosspoint.v ${SRC_PATH}/REDUCE_AND.v ${SRC_PATH}/REDUCE_OR.v ${SRC_PATH}/STRIDE.v
 vvp ${OUTPUT_PATH}/SIM
 gtkwave ${OUTPUT_PATH}/SIM.vcd &

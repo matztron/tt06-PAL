@@ -1,7 +1,8 @@
 module STRIDE #(
     //parameter OPERATION = "and", // either put "and" or "or"
     parameter LEN = 8,
-    parameter STRIDE = 2
+    parameter STRIDE = 2,
+    parameter START_OFFSET = 0
 ) (
     input [LEN-1:0] in,
     output [$signed(LEN/STRIDE)-1:0] strided_out
@@ -21,11 +22,8 @@ genvar i;
 genvar stride_index;
 generate
 
-    for (i = 0; i < LEN; i = i + 1) begin : REDUCE_LOOP
-        if (i%STRIDE == 0) begin
-            assign strided_out[$signed(i/STRIDE)] = in[i];
-            //stride_index = stride_index + 1;
-        end
+    for (i = START_OFFSET; i < LEN; i = i + STRIDE) begin : REDUCE_LOOP
+        assign strided_out[$signed(i/STRIDE)] = in[i];
     end
 
 endgenerate

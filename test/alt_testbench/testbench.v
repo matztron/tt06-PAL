@@ -3,7 +3,7 @@ module pal_tb ();
 // configure these
 parameter NUM_INPUTS = 8; // update by hand!
 parameter NUM_OUPUTS = 4;
-parameter NUM_INTERM_STAGES = 14;
+parameter NUM_INTERM_STAGES = 4;
 // ---
 
 localparam BITSTREAM_LEN = $signed(2*NUM_INPUTS*NUM_INTERM_STAGES + NUM_INTERM_STAGES*NUM_OUPUTS);
@@ -14,7 +14,7 @@ reg clk_pal_tb;
 
 // Currently: O0 = ~I0 | I1 & ~(I2 & I3)
 wire [BITSTREAM_LEN-1:0] bitstream; // TODO: Update width by hand (according to assignment below)
-assign bitstream = 280'b0000000000000000000000000000000000000000001000000000000001000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000110000000000000010000000000000000000000000; // TODO: Update this by hand
+assign bitstream = 80'b00000000100000000100000000100000000000000000000000000000000100001000010000100001; // TODO: Update this by hand
 
 //assign clk_pal_tb = clk_tb ^ clk_en_tb;
 
@@ -59,8 +59,12 @@ tt_um_MATTHIAS_M_PAL_TOP_WRAPPER uut(
 end*/
 
 integer i;
-// Bitstream programming
+// Testcase
 initial begin
+    $dumpfile("./output/SIM.vcd");
+    $dumpvars(0, pal_tb);
+
+    // Bitstream programming
     clk_pal_tb = 1'b0;
     tt_res_n_tb = 1'b1;
     tt_ena_tb = 1'b1;
@@ -80,33 +84,29 @@ initial begin
     #10
     // Now set the outputs active
     enable_tb = 1'b1;
-end
-
-// Testcase
-initial begin
-    $dumpfile("./output/SIM.vcd");
-    $dumpvars(0, pal_tb);
-
-    #300
-
-    // here the output is 0
-    inputs_tb = 8'b0000_1111;
-
-    #100
-
-    // Change some of the upper bits -> these are not used in the logic function
-    // thus this should have no effect
-    inputs_tb = 8'b0101_1111;
 
     // here the output is 0
     inputs_tb = 8'b0000_0000;
 
     #100
 
-    // here the output is 1
-    inputs_tb = 8'b0000_1010;
+    // Change some of the upper bits -> these are not used in the logic function
+    // thus this should have no effect
+    inputs_tb = 8'b0000_0001;
 
-    #50
+    #100
+
+    inputs_tb = 8'b0000_0010;
+
+    #100
+
+    inputs_tb = 8'b0000_0100;
+
+    #100
+
+    inputs_tb = 8'b0000_1000;
+
+    #100
 
     // when enable is de-asserted the outputs should go to 0
     enable_tb = 0;
@@ -122,3 +122,6 @@ initial begin
 end
     
 endmodule
+
+// BUG:
+// All outputs output the value of the O0...

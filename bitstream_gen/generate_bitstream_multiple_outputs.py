@@ -14,7 +14,7 @@ import parse_eq_str as str_parser
 
 # shape of the PAL device
 INPUT_NUM = 8 # N
-INTERMED_SIG_NUM = 14 # P
+INTERMED_SIG_NUM = 4 # P
 OUTPUT_NUM = 4 # M
 
 #---
@@ -25,12 +25,12 @@ I0 = exprvar('I0')
 I1 = exprvar('I1')
 I2 = exprvar('I2')
 I3 = exprvar('I3')
-'''I4 = exprvar('I4')
+I4 = exprvar('I4')
 I5 = exprvar('I5')
 I6 = exprvar('I6')
-I7 = exprvar('I7')'''
+I7 = exprvar('I7')
 
-Inputs = [I0, I1, I2, I3] #I4, I5, I6, I7]
+Inputs = [I0, I1, I2, I3, I4, I5, I6, I7]
 
 #---
 
@@ -43,11 +43,12 @@ Inputs = [I0, I1, I2, I3] #I4, I5, I6, I7]
 # &: AND 
 
 # For now: There should only be one equation
-O0 = ~I1
-O1 = I2 | ~I1
+O0 = I1
+O1 = I2
 O2 = I3
+O3 = I7
 
-Equations = [O0, O1, O2]
+Equations = [O0, O1, O2, O3]
 #---
 
 # Display Truth table
