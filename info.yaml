@@ -40,7 +40,7 @@ pinout:
   uo[1]: "Combinatorial output 1"
   uo[2]: "Combinatorial output 2"
   uo[3]: "Combinatorial output 3"
-  uo[4]: "unused - tied to 0"
+  uo[4]: "Combinatorial output 3"
   uo[5]: "unused - tied to 0"
   uo[6]: "unused - tied to 0"
   uo[7]: "unused - tied to 0"

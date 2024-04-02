@@ -14,7 +14,7 @@ reg clk_pal_tb;
 
 // Currently: O0 = ~I0 | I1 & ~(I2 & I3)
 wire [BITSTREAM_LEN-1:0] bitstream; // TODO: Update width by hand (according to assignment below)
-assign bitstream = 231'b000001000000000100000010001000000000001000000101000000000000000000001100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000001000000000001000000000001000000000001100000; // TODO: Update this by hand
+assign bitstream = 231'b000010000000000000000010001100000000000000000101100000000000100000001100000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000001000000000001000000000001000000000001100000; // TODO: Update this by hand
 
 //assign clk_pal_tb = clk_tb ^ clk_en_tb;
 
@@ -116,8 +116,28 @@ initial begin
 
     #100
 
+    inputs_tb = 8'b0000_0010; //! should be 1
+
+    #100
+
+    inputs_tb = 8'b0000_0110; //! should be 0
+
+    #100
+
+    inputs_tb = 8'b0000_0011; //! should be 1
+
+    #100
+
     // when enable is de-asserted the outputs should go to 0
     enable_tb = 0;
+
+    inputs_tb = 8'b0000_0111; //! should be 1 but enable is off
+
+    #100
+
+    inputs_tb = 8'b0000_0000; //! should be 0 but enable is off
+
+    #100
 
     #50
 
