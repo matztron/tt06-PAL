@@ -1,4 +1,4 @@
-module STRIDE #(
+module stride #(
     //parameter OPERATION = "and", // either put "and" or "or"
     parameter LEN = 8,
     parameter STRIDE = 2,

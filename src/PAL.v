@@ -1,12 +1,12 @@
 module PAL #(
     parameter N = 8, // Number of Inputs
-    parameter M = 8, // NUmber of outputs
-    parameter P = 8 // Number of intermediate stages
+    parameter P = 8, // Number of intermediate stages
+    parameter M = 8  // Number of outputs
 )(
-    input CLK,
-    input RES_N,
-    input EN,
-    input CFG,
+    input clk,
+    input res_n,
+    input en,
+    input cfg,
     input [N-1:0] INPUT_VARS,
     output [M-1:0] OUTPUT_VALS
 );
@@ -33,13 +33,13 @@ module PAL #(
     assign FF_CHAIN_OR = FF_CHAIN[SR_LEN-1:FF_CHAIN_OR_BASE_INDEX];
 
     // Shift register (stores the configuration)
-    SR #(
+    sr #(
         .LEN(SR_LEN)
     ) sr (
-        .clk(CLK),
-        .res_n(RES_N),
-        .en(EN),
-        .cfg(CFG),
+        .clk(clk),
+        .res_n(res_n),
+        .en(en),
+        .cfg(cfg),
         .ff_chain(FF_CHAIN)
     );
 
@@ -54,7 +54,7 @@ module PAL #(
     wire [2*N*P-1:0] and_results;
     wire [P*M-1:0] or_results;
     wire test_lol;
-    assign test_lol = CLK;
+    assign test_lol = clk;
 
 
     // Iterators (running variables)
@@ -80,13 +80,13 @@ module PAL #(
         for (n = 0; n < $signed(2*N); n = n + 1 ) begin : AND_GEN_LOOP_INNER
             //assign INTERM_VARS[p] = INTERM_VARS[p] ^ (FF_CHAIN[FF_CHAIN_AND_BASE_INDEX + p + n*P] ^ INPUT_VARS[n]);
             //assign and_cols[p][n] = INPUT_VARS[n] ^ FF_CHAIN[$signed(FF_CHAIN_AND_BASE_INDEX + p + n*P)];
-            CROSSPOINT #(.OP("and")) cp (.data_in(INPUT_VARS_N[n]), .cfg_in(FF_CHAIN_AND[$signed(p + n*P)]), .data_out(and_results[$signed(p + n*P)]));
+            crosspoint #(.OP("and")) cp (.data_in(INPUT_VARS_N[n]), .cfg_in(FF_CHAIN_AND[$signed(p + n*P)]), .data_out(and_results[$signed(p + n*P)]));
         end
 
         // THIS ALWAYS DOES THE SAME!!! SHOULD BE DePENDeNT ON LOOP ITERATIONS!!!
         // Assign intermediate variables
         //assign INTERM_VARS[p] = &and_cols[p]; // AND reduction
-        REDUCE_AND #(
+        reduce_and #(
             .LEN(2*N*P),
             .STRIDE(P),
             .COL_INDEX(p)
@@ -105,12 +105,12 @@ module PAL #(
         for (p = 0; p < P; p = p + 1) begin : OR_GEN_LOOP_INNER
             //assign OUTPUT_VALS[m] = OUTPUT_VALS[m] | (FF_CHAIN[FF_CHAIN_OR_BASE_INDEX + p + m*P] ^ INTERM_VARS[p]);
             //assign or_rows[m][p] = INTERM_VARS[p] ^ FF_CHAIN[$signed(FF_CHAIN_OR_BASE_INDEX + p + m*P)];
-            CROSSPOINT #(.OP("or")) cp (.data_in(INTERM_VARS[p]), .cfg_in(FF_CHAIN_OR[$signed(p + m*P)]), .data_out(or_results[$signed(p + m*P)]));
+            crosspoint #(.OP("or")) cp (.data_in(INTERM_VARS[p]), .cfg_in(FF_CHAIN_OR[$signed(p + m*P)]), .data_out(or_results[$signed(p + m*P)]));
         end
 
         // Assign to outputs
         //assign OUTPUT_VALS[m] = |or_rows[m]; // OR reduction
-        REDUCE_OR #(
+        reduce_or #(
             .NUM_INTERM_STAGES(P),
             .ROW_INDEX(m),
             .LEN(P*M)

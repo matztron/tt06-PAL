@@ -1,4 +1,4 @@
-module REDUCE_AND #(
+module reduce_and #(
     parameter STRIDE = 2,
     parameter LEN = 4,
     parameter COL_INDEX = 0
@@ -10,7 +10,7 @@ module REDUCE_AND #(
     wire [LEN/STRIDE-1:0] data_stride; 
 
     //Stride instance
-    STRIDE #(
+    stride #(
         .LEN(LEN),
         .STRIDE(STRIDE),
         .START_OFFSET(COL_INDEX)

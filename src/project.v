@@ -25,7 +25,7 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // PAL size parameters
   parameter NUM_INPUTS = 8;
-  parameter NUM_INTERMEDIATE_STAGES = 4;
+  parameter NUM_INTERMEDIATE_STAGES = 14;
   parameter NUM_OUTPUTS = 4;
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -46,10 +46,10 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
     .M(NUM_OUTPUTS), // NUmber of outputs
     .P(NUM_INTERMEDIATE_STAGES) // Number of intermediate stages
   ) pal_I (
-    .CLK(uio_in[2]), // do clock gating with ena signal?
-    .RES_N(rst_n),
-    .EN(ena & uio_in[1]), // if the enable signal is asserted the configuration is applied to the PAL fabric (also the design must be selected with the tto_en)
-    .CFG(uio_in[0]),
+    .clk(uio_in[2]), // do clock gating with ena signal?
+    .res_n(rst_n),
+    .en(ena & uio_in[1]), // if the enable signal is asserted the configuration is applied to the PAL fabric (also the design must be selected with the tto_en)
+    .cfg(uio_in[0]),
     .INPUT_VARS(ui_in),
     .OUTPUT_VALS(uo_out[3:0])
   );

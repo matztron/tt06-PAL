@@ -1,4 +1,4 @@
-module CROSSPOINT #(
+module crosspoint #(
     parameter OP = "and"
 )
 (

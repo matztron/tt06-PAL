@@ -1,4 +1,4 @@
-module SR #(
+module sr #(
     parameter LEN=8
 )(
     input clk,

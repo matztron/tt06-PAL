@@ -1,4 +1,4 @@
-module REDUCE_OR #(
+module reduce_or #(
     parameter NUM_INTERM_STAGES = 4,
     parameter ROW_INDEX = 0,
     parameter LEN = 4
