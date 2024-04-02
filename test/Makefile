@@ -5,7 +5,7 @@
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = project.v crosspoint.v PAL.v REDUCE.v SR.v STRIDE.v
+PROJECT_SOURCES = project.v crosspoint.v PAL.v reduce_and.v reduce_or sr.v stride.v
 
 ifneq ($(GATES),yes)
 
