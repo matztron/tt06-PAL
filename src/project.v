@@ -27,7 +27,7 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
   assign uio_out = 0;
   // IO pin configuration
   assign uio_oe = 8'b0000_0000; // all IOs are inputs (the LSB is used to shift in Config data)
-  assign uo_out[7-(7-NUM_OUTPUTS):NUM_OUTPUTS] = {(NUM_OUTPUTS){1'b0}};
+  assign uo_out[7:NUM_OUTPUTS] = {(8-NUM_OUTPUTS){1'b0}};
 
   // Pin assignment
   // Clock: uio_in[2]
