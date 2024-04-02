@@ -20,13 +20,13 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
   assign uio_out = 0;
   // IO pin configuration
   assign uio_oe = 8'b0000_0000; // all IOs are inputs (the LSB is used to shift in Config data)
-  assign uo_out[7:4] = 4'b0000;
+  //assign uo_out[7:4] = 4'b0000;
 
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // PAL size parameters
   parameter NUM_INPUTS = 8;
   parameter NUM_INTERMEDIATE_STAGES = 11;
-  parameter NUM_OUTPUTS = 4;
+  parameter NUM_OUTPUTS = 8;
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   // Pin assignment
@@ -51,7 +51,7 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
     .en(ena & uio_in[1]), // if the enable signal is asserted the configuration is applied to the PAL fabric (also the design must be selected with the tto_en)
     .cfg(uio_in[0]),
     .INPUT_VARS(ui_in),
-    .OUTPUT_VALS(uo_out[3:0])
+    .OUTPUT_VALS(uo_out)
   );
 
 endmodule
