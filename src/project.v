@@ -20,14 +20,14 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
   // PAL size parameters
   parameter NUM_INPUTS = 8;
   parameter NUM_INTERMEDIATE_STAGES = 11;
-  parameter NUM_OUTPUTS = 6;
+  parameter NUM_OUTPUTS = 5;
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   // All output pins must be assigned. If not used, assign to 0. 
   assign uio_out = 0;
   // IO pin configuration
   assign uio_oe = 8'b0000_0000; // all IOs are inputs (the LSB is used to shift in Config data)
-  assign uo_out[7:NUM_OUTPUTS] = {(8-NUM_OUTPUTS){1'b0}};
+  assign uo_out[7:NUM_OUTPUTS] = {(8-NUM_OUTPUTS){1'b0}}; // tie unused outputs to 0
 
   // Pin assignment
   // Clock: uio_in[2]
