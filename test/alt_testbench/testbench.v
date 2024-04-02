@@ -2,7 +2,7 @@ module pal_tb ();
 
 // configure these
 parameter NUM_INPUTS = 8; // update by hand!
-parameter NUM_INTERM_STAGES = 13;
+parameter NUM_INTERM_STAGES = 10;
 parameter NUM_OUPUTS = 4;
 // ---
 
