@@ -14,7 +14,7 @@ import parse_eq_str as str_parser
 
 # shape of the PAL device
 INPUT_NUM = 8 # N
-INTERMED_SIG_NUM = 14 # P
+INTERMED_SIG_NUM = 13 # P
 OUTPUT_NUM = 4 # M
 
 #---
