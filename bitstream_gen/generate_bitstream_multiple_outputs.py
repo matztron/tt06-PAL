@@ -15,7 +15,7 @@ import parse_eq_str as str_parser
 # shape of the PAL device
 INPUT_NUM = 8 # N
 INTERMED_SIG_NUM = 11 # P
-OUTPUT_NUM = 6 # M
+OUTPUT_NUM = 5 # M
 
 #---
 # Variables
@@ -46,9 +46,10 @@ Inputs = [I0, I1, I2, I3, I4, I5, I6, I7]
 O0 = I1
 O1 = I2
 O2 = I3
-O3 = I7
+O3 = (I3 & I2)
+O4 = I0 ^ I1
 
-Equations = [O0, O1, O2, O3]
+Equations = [O0, O1, O2, O3, O4]
 #---
 
 # Display Truth table
