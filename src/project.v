@@ -16,18 +16,18 @@ module tt_um_MATTHIAS_M_PAL_TOP_WRAPPER (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  // All output pins must be assigned. If not used, assign to 0. 
-  assign uio_out = 0;
-  // IO pin configuration
-  assign uio_oe = 8'b0000_0000; // all IOs are inputs (the LSB is used to shift in Config data)
-  assign uo_out[7-(7-NUM_OUTPUTS):NUM_OUPUTS] = (NUM_OUTPUTS){1'b0};
-
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // PAL size parameters
   parameter NUM_INPUTS = 8;
   parameter NUM_INTERMEDIATE_STAGES = 11;
   parameter NUM_OUTPUTS = 6;
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  // All output pins must be assigned. If not used, assign to 0. 
+  assign uio_out = 0;
+  // IO pin configuration
+  assign uio_oe = 8'b0000_0000; // all IOs are inputs (the LSB is used to shift in Config data)
+  assign uo_out[7-(7-NUM_OUTPUTS):NUM_OUTPUTS] = {(NUM_OUTPUTS){1'b0}};
 
   // Pin assignment
   // Clock: uio_in[2]
