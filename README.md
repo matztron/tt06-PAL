@@ -37,11 +37,16 @@ The testbench.v is the general testbench. Here bitstreams that were generated vi
 There are plenty of limitations with the current implementation.
 ### Bitstream generation
 The generation of the bitstream currently is very naive.
-The python script to generate the bitstream currently does the folloing
+The python script to generate the bitstream currently basically does the folloing:
 1. Take the arbitrary boolean expression and convert it to DNF form
 2. Verify that the number of terms that are connected by ORs are <= P (number of intermediate stages)
 3. AND Matrix: Generate a bitstream based on that by using one column per set of AND-connected variables.
 4. OR Matrix: Set all bits to 1 (only 1 output is supported!)
+
+However it should be noted that the steps above strictly only apply for the script that generates for only 1 output.
+The script for multiple outputs (it is recommended to use that one) can generate a bitstream for multiple outputs.
+It does this by creating a pool of konjugation-terms and selecting the ones needed in the OR-matrix per output.
+A limitation of the device is the number of intermediatory stages as this dictates how many konjugative terms there can be in total - however as said: reuse of terms for different functions is done by the Python script.
 
 Ideas for expansions are obvious:
 Programmable inversion of outputs; Feedback paths from output to input also come to mind
