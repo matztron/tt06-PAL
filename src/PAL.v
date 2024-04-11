@@ -83,7 +83,6 @@ module PAL #(
             crosspoint #(.OP("and")) cp (.data_in(INPUT_VARS_N[n]), .cfg_in(FF_CHAIN_AND[$signed(p + n*P)]), .data_out(and_results[$signed(p + n*P)]));
         end
 
-        // THIS ALWAYS DOES THE SAME!!! SHOULD BE DePENDeNT ON LOOP ITERATIONS!!!
         // Assign intermediate variables
         //assign INTERM_VARS[p] = &and_cols[p]; // AND reduction
         reduce_and #(
