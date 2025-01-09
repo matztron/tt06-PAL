@@ -5,12 +5,32 @@
 
 # ---
 
+bin_to_hex = {
+  "0000": "0",
+  "0001": "1",
+  "0010": "2",
+  "0011": "3",
+  "0100": "4",
+  "0101": "5",
+  "0110": "6",
+  "0111": "7",
+  "1000": "8",
+  "1001": "9",
+  "1010": "A",
+  "1011": "B",
+  "1100": "C",
+  "1101": "D",
+  "1110": "E",
+  "1111": "F",
+}
+
 # for pyeda see:
 # https://pyeda.readthedocs.io/en/latest/boolalg.html
 # https://stackoverflow.com/questions/27312328/disjunctive-normal-form-in-python
 
 from pyeda.inter import *
 import parse_eq_str as str_parser
+import textwrap
 
 # shape of the PAL device
 INPUT_NUM = 8 # N
@@ -43,11 +63,11 @@ Inputs = [I0, I1, I2, I3, I4, I5, I6, I7]
 # &: AND 
 
 # For now: There should only be one equation
-O0 = I1
-O1 = I2
+O0 = I3
+O1 = I3
 O2 = I3
-O3 = (I3 & I2)
-O4 = I0 & I1 & I2 & (I0 ^ I3) | I1 & ~I2 # a∧b∧c∧(a⊻d)∨b∧¬c
+O3 = I3
+O4 = I3 #I0 & I1 & I2 & (I0 ^ I3) | I1 & ~I2 # a∧b∧c∧(a⊻d)∨b∧¬c
 
 Equations = [O0, O1, O2, O3, O4]
 #---
@@ -347,3 +367,36 @@ print("---")
 print("Bitstream for verilog is:")
 #print(f"{len(bitstream)}'b{bitstream[::-1]}")
 print(f"{len(bitstream)}'b{bitstream}")
+
+print("Bitstream for Arduino sketch")
+print("this is still wrong!!!")
+# go through the bitstream in 4 bit steps and write it as hex character
+# we want:
+# const uint8 bitstream[] PROGMEM = {0x00, 0xaa, ...};
+
+#bitstream_hex = (hex(int(bitstream, 2)))#[::-1]
+bitstream_hex = ""
+c_bytes = textwrap.wrap(bitstream, 8)
+#print(c_bytes)
+
+for c_b in c_bytes:
+    c_b_adj = c_b[:4] + c_b[-4:]
+    
+    #print(c_b_adj)
+    
+    #print(c_b_adj[0:4])
+    #print(c_b_adj[4:8])
+
+    #print(bin_to_hex[c_b_adj[0:4]] + bin_to_hex[c_b_adj[4:8]])
+
+    bitstream_hex = bitstream_hex + bin_to_hex[c_b_adj[0:4]] + bin_to_hex[c_b_adj[4:8]]
+
+#print(bitstream_hex)
+
+ard_string = ""
+for i in range(0,len(bitstream_hex),2):
+    ard_string = ard_string + "0x" + bitstream_hex[i:i+2] + ", "
+
+ard_string = ard_string[:-2] + "};"
+print("C-style Arduino:")
+print("const uint8_t bitstream[] PROGMEM = {" + ard_string)
