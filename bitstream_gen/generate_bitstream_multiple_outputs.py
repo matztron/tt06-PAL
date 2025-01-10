@@ -64,10 +64,10 @@ Inputs = [I0, I1, I2, I3, I4, I5, I6, I7]
 
 # For now: There should only be one equation
 O0 = I3
-O1 = I3
-O2 = I3
-O3 = I3
-O4 = I3 #I0 & I1 & I2 & (I0 ^ I3) | I1 & ~I2 # a∧b∧c∧(a⊻d)∨b∧¬c
+O1 = I2
+O2 = I1
+O3 = I0
+O4 = I7 #I0 & I1 & I2 & (I0 ^ I3) | I1 & ~I2 # a∧b∧c∧(a⊻d)∨b∧¬c
 
 Equations = [O0, O1, O2, O3, O4]
 #---

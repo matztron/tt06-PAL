@@ -11,8 +11,7 @@
 //#define PROGRAM_MODE
 
 // Data!
-//const char* bitstream_c = "100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000010000000000100000000001000000000010000000000";
-const char* bitstream_c = "000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000010000000000100000000001000000000010000000000";
+const char* bitstream_c = "0100000000000000000000100000000000000000000100000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000001000000000001000000000001000000000001000000000001000000";
 //const uint8_t bitstream[] PROGMEM = {0x08, 0x00, 0x02, 0x30, 0x00, 0x05, 0x80, 0x08, 0x0C, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x08, 0x00, 0x80, 0x08, 0x00, 0xC0};
 const uint8_t bitstream_bit_len = 231;
 uint8_t bit_counter = 0;
@@ -76,6 +75,13 @@ void setup()
   delay(100);
   digitalWrite(TTO_BOARD_RESET, HIGH);
 
+  // write all 0s into SR!
+  int init_i = 0;
+  for (init_i = 0; init_i < bitstream_bit_len+50; init_i++) 
+  {
+    send_bit_str(0);
+  }
+
   // PROGRAM PAL
   int b_i = 0;
   // program the PAL
@@ -88,7 +94,8 @@ void setup()
   }*/
   for (b_i = 0; b_i < bitstream_bit_len; b_i++) 
   {
-    send_bit_str(bitstream_c[230-b_i]);
+    //send_bit_str(bitstream_c[230-b_i]);
+    send_bit_str(bitstream_c[b_i]);
   }
 
   digitalWrite(CLK_PIN, LOW);
@@ -105,6 +112,7 @@ void setup()
 
 void loop() 
 {
+  /*
   // Apply a stimuli
   digitalWrite(I2_PIN, i2_val);
 
@@ -128,6 +136,7 @@ void loop()
 
   // wait some time
   delay(5000);
+  */
 }
 
 void send_byte(uint8_t byte_value) 
@@ -205,6 +214,8 @@ void send_bit_str(char bit_value)
 
   // toggle clock
   // (design reacts to rising edges?)
+  digitalWrite(CLK_PIN, LOW); // unneccessary...
+  #10
   digitalWrite(CLK_PIN, HIGH);
   delay(10);            
   digitalWrite(CLK_PIN, LOW);  

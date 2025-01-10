@@ -4,6 +4,7 @@ module pal_tb ();
 parameter NUM_INPUTS = 8; // update by hand!
 parameter NUM_INTERM_STAGES = 11;
 parameter NUM_OUPUTS = 5;
+// In silicon: Input=8 ; Interm=11 ; Out=8
 // ---
 
 localparam BITSTREAM_LEN = $signed(2*NUM_INPUTS*NUM_INTERM_STAGES + NUM_INTERM_STAGES*NUM_OUPUTS);
